@@ -920,7 +920,10 @@ func _make_imported_material(color: Color, roughness: float, emission: Color = C
 	var mat := StandardMaterial3D.new()
 	mat.albedo_color = color
 	mat.roughness = roughness
-	mat.metallic = 0.03
+	# Keep buddy surfaces non-metallic and less mirror-like so outdoor sky tint
+	# does not wash skin toward cyan under Forward+ lighting.
+	mat.metallic = 0.0
+	mat.specular = 0.22
 	if emission_strength > 0.0:
 		mat.emission_enabled = true
 		mat.emission = emission
@@ -931,8 +934,11 @@ func _make_imported_material(color: Color, roughness: float, emission: Color = C
 func _make_vertex_color_material(tint: Color, roughness: float) -> StandardMaterial3D:
 	var mat := StandardMaterial3D.new()
 	mat.vertex_color_use_as_albedo = true
-	mat.vertex_color_is_srgb = false
+	# Sculpt vertex colors are authored in sRGB space in Blender color tools.
+	# Decoding them as sRGB in Godot preserves the intended darker green ramp.
+	mat.vertex_color_is_srgb = true
 	mat.albedo_color = tint
-	mat.roughness = roughness
-	mat.metallic = 0.03
+	mat.roughness = maxf(roughness, 0.72)
+	mat.metallic = 0.0
+	mat.specular = 0.18
 	return mat
