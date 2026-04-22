@@ -133,11 +133,12 @@ func _ready() -> void:
 		if _anim_player != null and not _anim_player.is_connected(&"animation_finished", on_anim_finished):
 			_anim_player.animation_finished.connect(on_anim_finished)
 		_refresh_overworld_locomotion_anim(0.0)
-		_apply_palette(
-			model_root,
-			Color(0.309804, 0.878431, 0.509804, 1.0),
-			Color(0.686275, 1.0, 0.772549, 1.0)
-		)
+		if not _is_sculpt_dino_model(model_root):
+			_apply_palette(
+				model_root,
+				Color(0.309804, 0.878431, 0.509804, 1.0),
+				Color(0.686275, 1.0, 0.772549, 1.0)
+			)
 	_build_speech_bubble()
 
 
