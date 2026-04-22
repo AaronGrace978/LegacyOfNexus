@@ -1,0 +1,252 @@
+{
+  "default_party": [
+    {
+      "name": "Dino Buddy",
+      "locked": true
+    },
+    {
+      "name": "Nova Cat"
+    },
+    {
+      "name": "Byte Owl"
+    }
+  ],
+  "buddies": {
+    "Dino Buddy": {
+      "battle_visual_scene": "res://scenes/buddies/dino_buddy_visual.tscn",
+      "overworld_follower_visual_scene": "res://scenes/buddies/dino_buddy_visual.tscn",
+      "palette": {
+        "primary": [0.309804, 0.878431, 0.509804, 1.0],
+        "accent": [0.686275, 1.0, 0.772549, 1.0]
+      },
+      "party_member": {
+        "max_health": 28,
+        "attack_power": 7,
+        "level": 7,
+        "locked": true
+      },
+      "capture_member": {
+        "max_health": 28,
+        "attack_power": 7,
+        "level": 7,
+        "locked": true
+      },
+      "encounter_stats": {
+        "base_health": 14,
+        "health_per_level": 3.0,
+        "base_attack": 2,
+        "attack_per_level": 0.55
+      },
+      "moves": [
+        {
+          "id": "hype_tackle",
+          "label": "Hype Tackle",
+          "kind": "single",
+          "power_mult": 1.0,
+          "requires_partner": false
+        },
+        {
+          "id": "combo_tail_whip",
+          "label": "Combo Tail Whip",
+          "kind": "all_enemies",
+          "power_mult": 1.28,
+          "requires_partner": false
+        },
+        {
+          "id": "loyal_roar",
+          "label": "Loyal Roar",
+          "kind": "buff_partner_next_attack",
+          "partner_buff_mult": 1.55,
+          "requires_partner": true
+        }
+      ]
+    },
+    "Nova Cat": {
+      "battle_visual_scene": "res://scenes/buddies/nova_cat_visual.tscn",
+      "palette": {
+        "primary": [0.07, 0.07, 0.09, 1.0],
+        "accent": [0.25, 0.95, 1.0, 1.0]
+      },
+      "party_member": {
+        "max_health": 22,
+        "attack_power": 5,
+        "level": 6
+      },
+      "capture_member": {
+        "max_health": 20,
+        "attack_power": 5,
+        "level": 5
+      },
+      "encounter_stats": {
+        "base_health": 13,
+        "health_per_level": 3.0,
+        "base_attack": 2,
+        "attack_per_level": 0.6
+      },
+      "moves": [
+        {
+          "id": "midnight_pounce",
+          "label": "Midnight Pounce",
+          "kind": "single",
+          "power_mult": 1.08,
+          "requires_partner": false
+        },
+        {
+          "id": "pixel_arc",
+          "label": "Pixel Arc",
+          "kind": "all_enemies",
+          "power_mult": 0.92,
+          "requires_partner": false
+        },
+        {
+          "id": "neon_feint",
+          "label": "Neon Feint",
+          "kind": "buff_partner_next_attack",
+          "partner_buff_mult": 1.35,
+          "requires_partner": true
+        }
+      ]
+    },
+    "Byte Owl": {
+      "battle_visual_scene": "res://scenes/buddies/byte_owl_visual.tscn",
+      "palette": {
+        "primary": [0.745098, 0.701961, 0.976471, 1.0],
+        "accent": [0.92549, 0.905882, 1.0, 1.0]
+      },
+      "party_member": {
+        "max_health": 24,
+        "attack_power": 4,
+        "level": 6
+      },
+      "capture_member": {
+        "max_health": 21,
+        "attack_power": 4,
+        "level": 5
+      },
+      "encounter_stats": {
+        "base_health": 15,
+        "health_per_level": 2.8,
+        "base_attack": 2,
+        "attack_per_level": 0.5
+      },
+      "moves": [
+        {
+          "id": "byte_peck",
+          "label": "Byte Peck",
+          "kind": "single",
+          "power_mult": 1.0,
+          "requires_partner": false
+        },
+        {
+          "id": "echo_gust",
+          "label": "Echo Gust",
+          "kind": "all_enemies",
+          "power_mult": 0.9,
+          "requires_partner": false
+        },
+        {
+          "id": "signal_jam",
+          "label": "Signal Jam",
+          "kind": "all_enemies_status",
+          "power_mult": 0.72,
+          "status_chance": 0.3,
+          "requires_partner": false
+        }
+      ]
+    },
+    "Sparklet": {
+      "battle_visual_scene": "res://scenes/buddies/sparklet_buddy_visual.tscn",
+      "palette": {
+        "primary": [0.45, 0.95, 1.0, 1.0],
+        "accent": [0.95, 1.0, 0.7, 1.0]
+      },
+      "party_member": {
+        "max_health": 18,
+        "attack_power": 4,
+        "level": 4
+      },
+      "capture_member": {
+        "max_health": 16,
+        "attack_power": 4,
+        "level": 4
+      },
+      "encounter_stats": {
+        "base_health": 14,
+        "health_per_level": 3.0,
+        "base_attack": 2,
+        "attack_per_level": 0.55
+      },
+      "moves": [
+        {
+          "id": "spark_zap",
+          "label": "Spark Zap",
+          "kind": "single",
+          "power_mult": 1.12,
+          "requires_partner": false
+        },
+        {
+          "id": "static_burst",
+          "label": "Static Burst",
+          "kind": "all_enemies_status",
+          "power_mult": 0.88,
+          "status_chance": 0.35,
+          "requires_partner": false
+        }
+      ]
+    },
+    "Red Rogue": {
+      "battle_visual_scene": "res://scenes/buddies/shade_enemy_visual.tscn",
+      "palette": {
+        "primary": [0.905882, 0.278431, 0.278431, 1.0],
+        "accent": [1.0, 0.666667, 0.666667, 1.0]
+      },
+      "capture_member": {
+        "max_health": 19,
+        "attack_power": 5,
+        "level": 4
+      },
+      "encounter_stats": {
+        "base_health": 15,
+        "health_per_level": 3.1,
+        "base_attack": 2,
+        "attack_per_level": 0.62
+      },
+      "moves": [
+        {
+          "id": "rogue_rush",
+          "label": "Rogue Rush",
+          "kind": "single",
+          "power_mult": 1.05,
+          "requires_partner": false
+        }
+      ]
+    },
+    "Red Shade": {
+      "battle_visual_scene": "res://scenes/buddies/shade_enemy_visual.tscn",
+      "palette": {
+        "primary": [0.643137, 0.203922, 0.203922, 1.0],
+        "accent": [0.901961, 0.470588, 0.470588, 1.0]
+      },
+      "capture_member": {
+        "max_health": 18,
+        "attack_power": 4,
+        "level": 4
+      },
+      "encounter_stats": {
+        "base_health": 14,
+        "health_per_level": 2.9,
+        "base_attack": 2,
+        "attack_per_level": 0.58
+      },
+      "moves": [
+        {
+          "id": "shade_lash",
+          "label": "Shade Lash",
+          "kind": "single",
+          "power_mult": 1.0,
+          "requires_partner": false
+        }
+      ]
+    }
+  }
+}
