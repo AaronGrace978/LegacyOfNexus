@@ -1,5 +1,8 @@
 # Legacy of Nexus
 
+<img width="300" height="105" alt="image" src="https://github.com/user-attachments/assets/e30e4ebf-ba57-416c-a5f8-28a39f5b67b5" />
+
+
 Legacy of Nexus is a Godot 4 action-RPG prototype focused on companion-driven exploration, real-time roaming, and buddy battles.
 
 ## Current Focus
