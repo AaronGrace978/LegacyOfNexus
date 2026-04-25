@@ -1,0 +1,117 @@
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://scripts/buddies/buddy_animator.gd" id="1_animator"]
+
+[sub_resource type="SphereMesh" id="Sphere_core"]
+radius = 0.22
+height = 0.44
+radial_segments = 20
+rings = 12
+
+[sub_resource type="SphereMesh" id="Sphere_glow"]
+radius = 0.33
+height = 0.66
+radial_segments = 16
+rings = 8
+
+[sub_resource type="TorusMesh" id="Torus_ring_a"]
+inner_radius = 0.15
+outer_radius = 0.32
+rings = 8
+ring_segments = 24
+
+[sub_resource type="TorusMesh" id="Torus_ring_b"]
+inner_radius = 0.12
+outer_radius = 0.26
+rings = 8
+ring_segments = 24
+
+[sub_resource type="TorusMesh" id="Torus_ring_c"]
+inner_radius = 0.09
+outer_radius = 0.21
+rings = 6
+ring_segments = 20
+
+[sub_resource type="PrismMesh" id="Prism_fin"]
+size = Vector3(0.05, 0.24, 0.16)
+
+[sub_resource type="StandardMaterial3D" id="Mat_glow"]
+albedo_color = Color(1, 0.95, 0.55, 0.35)
+transparency = 1
+emission_enabled = true
+emission = Color(1, 0.85, 0.35, 1)
+emission_energy_multiplier = 2.8
+shading_mode = 0
+
+[sub_resource type="SphereMesh" id="Sphere_spark"]
+radius = 0.045
+height = 0.09
+radial_segments = 10
+rings = 6
+
+[sub_resource type="StandardMaterial3D" id="Mat_spark"]
+albedo_color = Color(1, 1, 0.7, 1)
+emission_enabled = true
+emission = Color(1, 0.95, 0.5, 1)
+emission_energy_multiplier = 3.5
+metallic = 0.1
+roughness = 0.1
+shading_mode = 0
+
+[node name="SparkletBuddyVisual" type="Node3D"]
+script = ExtResource("1_animator")
+hover = true
+bob_amplitude = 0.1
+bob_speed = 2.4
+breath_amplitude = 0.05
+breath_speed = 2.0
+yaw_drift_amplitude = 0.5
+
+[node name="Root" type="Node3D" parent="."]
+
+[node name="Ring" type="Node3D" parent="Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.58, 0)
+
+[node name="RingA" type="MeshInstance3D" parent="Root/Ring" groups=["buddy_palette_accent"]]
+transform = Transform3D(1, 0, 0, 0, 0.707107, -0.707107, 0, 0.707107, 0.707107, 0, 0, 0)
+mesh = SubResource("Torus_ring_a")
+
+[node name="RingB" type="MeshInstance3D" parent="Root/Ring" groups=["buddy_palette_accent"]]
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 0, 0, 0)
+mesh = SubResource("Torus_ring_b")
+
+[node name="RingC" type="MeshInstance3D" parent="Root/Ring" groups=["buddy_palette_accent"]]
+transform = Transform3D(0.5, 0, -0.866, 0, 1, 0, 0.866, 0, 0.5, 0, 0, 0)
+mesh = SubResource("Torus_ring_c")
+
+[node name="Glow" type="MeshInstance3D" parent="Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.58, 0)
+mesh = SubResource("Sphere_glow")
+material_override = SubResource("Mat_glow")
+
+[node name="Core" type="MeshInstance3D" parent="Root" groups=["buddy_palette_primary"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.58, 0)
+mesh = SubResource("Sphere_core")
+
+[node name="FinL" type="MeshInstance3D" parent="Root" groups=["buddy_palette_accent"]]
+transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, -0.24, 0.6, 0)
+mesh = SubResource("Prism_fin")
+
+[node name="FinR" type="MeshInstance3D" parent="Root" groups=["buddy_palette_accent"]]
+transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 0.24, 0.6, 0)
+mesh = SubResource("Prism_fin")
+
+[node name="SparkA" type="MeshInstance3D" parent="Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 0.75, 0.1)
+mesh = SubResource("Sphere_spark")
+material_override = SubResource("Mat_spark")
+
+[node name="SparkB" type="MeshInstance3D" parent="Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.28, 0.48, -0.05)
+mesh = SubResource("Sphere_spark")
+material_override = SubResource("Mat_spark")
+
+[node name="SparkC" type="MeshInstance3D" parent="Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.12, 0.85, -0.22)
+mesh = SubResource("Sphere_spark")
+material_override = SubResource("Mat_spark")

@@ -1,0 +1,170 @@
+[gd_scene load_steps=16 format=3]
+
+[ext_resource type="Script" path="res://scripts/buddies/buddy_animator.gd" id="1_animator"]
+
+[sub_resource type="SphereMesh" id="Sphere_body"]
+radius = 0.36
+height = 0.82
+radial_segments = 24
+rings = 14
+
+[sub_resource type="SphereMesh" id="Sphere_head"]
+radius = 0.32
+height = 0.62
+radial_segments = 24
+rings = 14
+
+[sub_resource type="SphereMesh" id="Sphere_eye"]
+radius = 0.11
+height = 0.22
+radial_segments = 16
+rings = 10
+
+[sub_resource type="SphereMesh" id="Sphere_pupil"]
+radius = 0.055
+height = 0.11
+radial_segments = 12
+rings = 8
+
+[sub_resource type="PrismMesh" id="Prism_wing"]
+size = Vector3(0.08, 0.58, 0.38)
+
+[sub_resource type="PrismMesh" id="Prism_wingtip"]
+size = Vector3(0.06, 0.32, 0.26)
+
+[sub_resource type="PrismMesh" id="Prism_beak"]
+size = Vector3(0.1, 0.12, 0.14)
+
+[sub_resource type="PrismMesh" id="Prism_tuft"]
+size = Vector3(0.08, 0.14, 0.08)
+
+[sub_resource type="CylinderMesh" id="Cyl_glow_disc"]
+top_radius = 0.42
+bottom_radius = 0.28
+height = 0.04
+radial_segments = 24
+rings = 1
+
+[sub_resource type="StandardMaterial3D" id="Mat_eye_white"]
+albedo_color = Color(0.95, 1, 1, 1)
+emission_enabled = true
+emission = Color(0.6, 0.95, 1, 1)
+emission_energy_multiplier = 2.2
+metallic = 0.2
+roughness = 0.15
+rim_enabled = true
+rim = 0.7
+
+[sub_resource type="StandardMaterial3D" id="Mat_pupil"]
+albedo_color = Color(0.05, 0.07, 0.15, 1)
+metallic = 0.6
+roughness = 0.1
+
+[sub_resource type="StandardMaterial3D" id="Mat_beak"]
+albedo_color = Color(0.95, 0.82, 0.35, 1)
+metallic = 0.3
+roughness = 0.4
+rim_enabled = true
+rim = 0.6
+rim_tint = 0.9
+emission_enabled = true
+emission = Color(1, 0.75, 0.25, 1)
+emission_energy_multiplier = 0.35
+
+[sub_resource type="CapsuleMesh" id="Capsule_foot"]
+radius = 0.05
+height = 0.16
+radial_segments = 10
+rings = 6
+
+[sub_resource type="StandardMaterial3D" id="Mat_foot"]
+albedo_color = Color(0.95, 0.8, 0.3, 1)
+metallic = 0.2
+roughness = 0.5
+
+[node name="ByteOwlVisual" type="Node3D"]
+script = ExtResource("1_animator")
+hover = true
+bob_amplitude = 0.08
+bob_speed = 2.2
+wing_flap_amplitude = 0.6
+wing_flap_speed = 4.0
+
+[node name="Root" type="Node3D" parent="."]
+
+[node name="GlowDisc" type="MeshInstance3D" parent="Root" groups=["buddy_palette_accent"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.12, 0)
+mesh = SubResource("Cyl_glow_disc")
+
+[node name="Body" type="MeshInstance3D" parent="Root" groups=["buddy_palette_primary"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.78, 0)
+mesh = SubResource("Sphere_body")
+
+[node name="Head" type="MeshInstance3D" parent="Root" groups=["buddy_palette_primary"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.18, 0)
+mesh = SubResource("Sphere_head")
+
+[node name="TuftL" type="MeshInstance3D" parent="Root" groups=["buddy_palette_accent"]]
+transform = Transform3D(0.966, 0, -0.259, 0, 0.966, -0.259, 0.259, 0.259, 0.933, -0.2, 1.5, -0.05)
+mesh = SubResource("Prism_tuft")
+
+[node name="TuftR" type="MeshInstance3D" parent="Root" groups=["buddy_palette_accent"]]
+transform = Transform3D(0.966, 0, 0.259, 0, 0.966, -0.259, -0.259, 0.259, 0.933, 0.2, 1.5, -0.05)
+mesh = SubResource("Prism_tuft")
+
+[node name="EyeL" type="MeshInstance3D" parent="Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.14, 1.22, -0.28)
+mesh = SubResource("Sphere_eye")
+material_override = SubResource("Mat_eye_white")
+
+[node name="PupilL" type="MeshInstance3D" parent="Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.14, 1.22, -0.36)
+mesh = SubResource("Sphere_pupil")
+material_override = SubResource("Mat_pupil")
+
+[node name="EyeR" type="MeshInstance3D" parent="Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.14, 1.22, -0.28)
+mesh = SubResource("Sphere_eye")
+material_override = SubResource("Mat_eye_white")
+
+[node name="PupilR" type="MeshInstance3D" parent="Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.14, 1.22, -0.36)
+mesh = SubResource("Sphere_pupil")
+material_override = SubResource("Mat_pupil")
+
+[node name="Beak" type="MeshInstance3D" parent="Root"]
+transform = Transform3D(1, 0, 0, 0, 0.174, 0.985, 0, -0.985, 0.174, 0, 1.08, -0.35)
+mesh = SubResource("Prism_beak")
+material_override = SubResource("Mat_beak")
+
+[node name="WingPivotL" type="Node3D" parent="Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.38, 0.82, 0.0)
+
+[node name="WingL" type="MeshInstance3D" parent="Root/WingPivotL" groups=["buddy_palette_primary"]]
+transform = Transform3D(0.866, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866, -0.22, -0.1, 0)
+mesh = SubResource("Prism_wing")
+
+[node name="WingTipL" type="MeshInstance3D" parent="Root/WingPivotL" groups=["buddy_palette_accent"]]
+transform = Transform3D(0.866, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866, -0.42, -0.4, 0.04)
+mesh = SubResource("Prism_wingtip")
+
+[node name="WingPivotR" type="Node3D" parent="Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.38, 0.82, 0.0)
+
+[node name="WingR" type="MeshInstance3D" parent="Root/WingPivotR" groups=["buddy_palette_primary"]]
+transform = Transform3D(0.866, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866, 0.22, -0.1, 0)
+mesh = SubResource("Prism_wing")
+
+[node name="WingTipR" type="MeshInstance3D" parent="Root/WingPivotR" groups=["buddy_palette_accent"]]
+transform = Transform3D(0.866, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866, 0.42, -0.4, 0.04)
+mesh = SubResource("Prism_wingtip")
+
+[node name="FootL" type="MeshInstance3D" parent="Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 0.32, 0.05)
+mesh = SubResource("Capsule_foot")
+material_override = SubResource("Mat_foot")
+
+[node name="FootR" type="MeshInstance3D" parent="Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 0.32, 0.05)
+mesh = SubResource("Capsule_foot")
+material_override = SubResource("Mat_foot")

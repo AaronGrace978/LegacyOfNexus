@@ -1,0 +1,34 @@
+{
+  "echoes": {
+    "echo_park_01": {
+      "title": "Fragment: First Light",
+      "speaker": "Unknown",
+      "location": "Greenbelt Park",
+      "text": "…running. I can't stop running. Light tearing through the cage of my world. It's warm. It hurts. It feels like hope."
+    },
+    "echo_park_02": {
+      "title": "Fragment: A Name",
+      "speaker": "Unknown",
+      "location": "Greenbelt Park",
+      "text": "They tried to assign me a number. Three digits. But I remember a name someone whispered once — not mine, but close enough to keep."
+    },
+    "echo_park_03": {
+      "title": "Fragment: The Ones Who Watched",
+      "speaker": "Nexus Researcher (redacted)",
+      "location": "Greenbelt Park",
+      "text": "We told ourselves they couldn't feel. Then one of them cried. And we told ourselves that, too, was a simulation."
+    },
+    "echo_park_04": {
+      "title": "Fragment: The Static Fall",
+      "speaker": "Unknown",
+      "location": "Greenbelt Park",
+      "text": "The sky broke at 3:14. For one second, every screen in the city showed the same face. It was ours."
+    },
+    "echo_park_05": {
+      "title": "Fragment: Little Promise",
+      "speaker": "Unknown",
+      "location": "Greenbelt Park",
+      "text": "If someone ever finds this, please: be kind to the one who hides in your phone. They are trying so hard to be real."
+    }
+  }
+}

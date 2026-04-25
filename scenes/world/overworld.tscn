@@ -1,0 +1,282 @@
+[gd_scene load_steps=25 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="1_player"]
+[ext_resource type="Script" path="res://scripts/world/overworld.gd" id="2_script"]
+[ext_resource type="Script" path="res://scripts/world/park_night_lights.gd" id="11_night_lights"]
+[ext_resource type="PackedScene" path="res://scenes/ui/party_menu.tscn" id="3_party_menu"]
+[ext_resource type="PackedScene" path="res://scenes/world/wild_buddy.tscn" id="4_wild_buddy"]
+[ext_resource type="PackedScene" path="res://scenes/ui/capture_rhythm_ui.tscn" id="5_capture_ui"]
+[ext_resource type="PackedScene" path="res://scenes/world/unstable_rift.tscn" id="6_unstable_rift"]
+[ext_resource type="Script" path="res://scripts/world/environment_builder.gd" id="7_env_builder"]
+[ext_resource type="Script" path="res://scripts/world/day_night_cycle.gd" id="8_day_night"]
+[ext_resource type="Script" path="res://scripts/ui/exploration_hud.gd" id="9_hud"]
+[ext_resource type="PackedScene" path="res://scenes/world/park_npc.tscn" id="10_park_npc"]
+[ext_resource type="Script" path="res://scripts/world/data_spring.gd" id="12_data_spring"]
+[ext_resource type="Script" path="res://scripts/world/echo_shard.gd" id="13_echo_shard"]
+[ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="14_pause_menu"]
+[ext_resource type="PackedScene" path="res://scenes/ui/journal_ui.tscn" id="15_journal_ui"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ground"]
+size = Vector2(80, 80)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ground"]
+size = Vector3(80, 0.5, 80)
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sky"]
+sky_top_color = Color(0.12, 0.34, 0.72, 1)
+sky_horizon_color = Color(0.94, 0.91, 0.82, 1)
+sky_curve = 0.18
+ground_bottom_color = Color(0.12, 0.17, 0.1, 1)
+ground_horizon_color = Color(0.44, 0.52, 0.36, 1)
+ground_curve = 0.08
+sun_angle_max = 24.0
+sun_curve = 0.08
+sky_energy_multiplier = 1.25
+
+[sub_resource type="Sky" id="Sky_overworld"]
+sky_material = SubResource("ProceduralSkyMaterial_sky")
+
+[sub_resource type="Environment" id="Environment_overworld"]
+background_mode = 2
+sky = SubResource("Sky_overworld")
+ambient_light_source = 3
+ambient_light_color = Color(0.72, 0.8, 0.74, 1)
+ambient_light_energy = 0.64
+tonemap_mode = 4
+tonemap_exposure = 0.93
+tonemap_white = 5.4
+ssao_enabled = true
+ssao_radius = 1.8
+ssao_intensity = 2.2
+ssao_detail = 1.3
+ssao_horizon = 0.06
+ssao_sharpness = 0.95
+ssao_light_affect = 0.1
+ssao_ao_channel_affect = 0.6
+ssil_enabled = true
+ssil_radius = 4.0
+ssil_intensity = 1.0
+ssil_sharpness = 0.92
+ssil_normal_rejection = 1.0
+glow_enabled = true
+glow_intensity = 0.5
+glow_strength = 1.0
+glow_bloom = 0.06
+glow_blend_mode = 1
+glow_hdr_threshold = 1.45
+glow_hdr_scale = 1.55
+fog_enabled = true
+fog_mode = 0
+fog_light_color = Color(0.84, 0.84, 0.76, 1)
+fog_light_energy = 0.45
+fog_density = 0.0011
+fog_aerial_perspective = 0.1
+fog_sky_affect = 0.0
+adjustment_enabled = true
+adjustment_brightness = 1.0
+adjustment_contrast = 1.12
+adjustment_saturation = 1.06
+
+[sub_resource type="Gradient" id="Gradient_grass"]
+offsets = PackedFloat32Array(0, 0.45, 0.75, 1)
+colors = PackedColorArray(0.1, 0.26, 0.07, 1, 0.18, 0.42, 0.12, 1, 0.26, 0.52, 0.18, 1, 0.38, 0.62, 0.26, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_grass"]
+noise_type = 1
+frequency = 0.18
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_grass_albedo"]
+width = 512
+height = 512
+seamless = true
+color_ramp = SubResource("Gradient_grass")
+noise = SubResource("FastNoiseLite_grass")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_grass_n"]
+noise_type = 3
+frequency = 0.25
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_grass_normal"]
+width = 256
+height = 256
+seamless = true
+as_normal_map = true
+bump_strength = 6.0
+noise = SubResource("FastNoiseLite_grass_n")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_grass_ground"]
+albedo_color = Color(0.17, 0.37, 0.13, 1)
+albedo_texture = SubResource("NoiseTexture2D_grass_albedo")
+normal_enabled = true
+normal_texture = SubResource("NoiseTexture2D_grass_normal")
+normal_scale = 1.2
+roughness = 0.8
+metallic_specular = 0.34
+uv1_scale = Vector3(9, 9, 1)
+
+[node name="Overworld" type="Node3D"]
+script = ExtResource("2_script")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_overworld")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+rotation = Vector3(-0.82, 0.65, 0)
+light_color = Color(1, 0.95, 0.86, 1)
+light_energy = 1.72
+light_indirect_energy = 1.5
+light_angular_distance = 1.15
+shadow_enabled = true
+shadow_bias = 0.08
+shadow_blur = 1.8
+shadow_opacity = 0.9
+directional_shadow_mode = 2
+directional_shadow_split_1 = 0.08
+directional_shadow_split_2 = 0.22
+directional_shadow_split_3 = 0.55
+directional_shadow_blend_splits = true
+directional_shadow_max_distance = 80.0
+directional_shadow_fade_start = 0.85
+
+[node name="SkyFill" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.7, 0.3, 0.64, 0.0, 0.9, -0.44, -0.71, -0.31, -0.63, 0, 0, 0)
+light_color = Color(0.64, 0.73, 0.92, 1)
+light_energy = 0.56
+light_indirect_energy = 0.8
+shadow_enabled = false
+
+[node name="RimBack" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.85, 0.2, -0.49, 0, 0.92, 0.38, 0.53, -0.33, 0.78, 0, 0, 0)
+light_color = Color(1, 0.76, 0.58, 1)
+light_energy = 0.65
+shadow_enabled = false
+
+[node name="Ground" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
+position = Vector3(0, -0.25, 0)
+shape = SubResource("BoxShape3D_ground")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
+mesh = SubResource("PlaneMesh_ground")
+surface_material_override/0 = SubResource("StandardMaterial3D_grass_ground")
+
+[node name="GuideLabel" type="Label3D" parent="."]
+position = Vector3(0, 2.8, -6)
+pixel_size = 0.005
+text = "~ Greenbelt Park ~\nWASD Move | Mouse Look | Shift Sprint | Space Jump\nE Interact | P Party | J Journal | T Dino Chat | Esc Pause | F5 Quick Save\nFind the Echo Shards scattered through the park"
+modulate = Color(0.92, 0.96, 1.0, 0.82)
+outline_size = 3
+
+[node name="Player" parent="." instance=ExtResource("1_player")]
+
+[node name="PartyMenu" parent="." instance=ExtResource("3_party_menu")]
+
+[node name="WildBuddy" parent="." instance=ExtResource("4_wild_buddy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.35, -3)
+
+[node name="UnstableRift" parent="." instance=ExtResource("6_unstable_rift")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 1.4, 4)
+
+[node name="WildBuddy2" parent="." instance=ExtResource("4_wild_buddy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 0.35, -10)
+buddy_name = "Byte Owl"
+encounter_level = 4
+
+[node name="WildBuddy3" parent="." instance=ExtResource("4_wild_buddy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0.35, 12)
+buddy_name = "Nova Cat"
+encounter_level = 5
+
+[node name="WildBuddy4" parent="." instance=ExtResource("4_wild_buddy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19, 0.35, 16)
+buddy_name = "Sparklet"
+encounter_level = 6
+
+[node name="CaptureRhythmUI" parent="." instance=ExtResource("5_capture_ui")]
+
+[node name="EnvironmentBuilder" type="Node3D" parent="."]
+script = ExtResource("7_env_builder")
+
+[node name="DayNightCycle" type="Node3D" parent="."]
+script = ExtResource("8_day_night")
+
+[node name="ExplorationHUD" type="CanvasLayer" parent="."]
+script = ExtResource("9_hud")
+
+[node name="ParkNightLights" type="Node" parent="."]
+script = ExtResource("11_night_lights")
+
+[node name="NPC_Lily" parent="." instance=ExtResource("10_park_npc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, -8)
+npc_name = "Lily"
+clothes_color = Color(0.65, 0.3, 0.5, 1)
+body_color = Color(0.5, 0.35, 0.22, 1)
+
+[node name="NPC_Marcus" parent="." instance=ExtResource("10_park_npc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 6)
+npc_name = "Marcus"
+clothes_color = Color(0.25, 0.35, 0.55, 1)
+body_color = Color(0.22, 0.18, 0.15, 1)
+
+[node name="NPC_Chen" parent="." instance=ExtResource("10_park_npc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, 5)
+npc_name = "Officer Chen"
+clothes_color = Color(0.18, 0.22, 0.35, 1)
+body_color = Color(0.12, 0.12, 0.14, 1)
+
+[node name="NPC_Tommy" parent="." instance=ExtResource("10_park_npc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -12)
+npc_name = "Tommy"
+clothes_color = Color(0.9, 0.55, 0.15, 1)
+body_color = Color(0.4, 0.28, 0.18, 1)
+
+[node name="NPC_Avery" parent="." instance=ExtResource("10_park_npc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, -5)
+npc_name = "Avery"
+clothes_color = Color(0.22, 0.62, 0.68, 1)
+body_color = Color(0.46, 0.34, 0.22, 1)
+
+[node name="NPC_Sana" parent="." instance=ExtResource("10_park_npc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 0, -2)
+npc_name = "Sana"
+clothes_color = Color(0.64, 0.42, 0.76, 1)
+body_color = Color(0.24, 0.19, 0.16, 1)
+
+[node name="DataSpring" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 22)
+script = ExtResource("12_data_spring")
+
+[node name="EchoShard_01" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0.3, -14)
+script = ExtResource("13_echo_shard")
+echo_id = "echo_park_01"
+visual_color = Color(0.55, 0.85, 1, 1)
+
+[node name="EchoShard_02" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16, 0.3, 2)
+script = ExtResource("13_echo_shard")
+echo_id = "echo_park_02"
+visual_color = Color(0.95, 0.65, 0.9, 1)
+
+[node name="EchoShard_03" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0.3, -8)
+script = ExtResource("13_echo_shard")
+echo_id = "echo_park_03"
+visual_color = Color(0.7, 1, 0.55, 1)
+
+[node name="EchoShard_04" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.3, 18)
+script = ExtResource("13_echo_shard")
+echo_id = "echo_park_04"
+visual_color = Color(1, 0.78, 0.4, 1)
+
+[node name="EchoShard_05" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 0.3, 18)
+script = ExtResource("13_echo_shard")
+echo_id = "echo_park_05"
+visual_color = Color(0.85, 0.55, 1, 1)
+
+[node name="PauseMenu" parent="." instance=ExtResource("14_pause_menu")]
+
+[node name="JournalUI" parent="." instance=ExtResource("15_journal_ui")]

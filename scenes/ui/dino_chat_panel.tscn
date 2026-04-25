@@ -1,0 +1,117 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/dino_chat_panel.gd" id="1_script"]
+
+[node name="DinoChatPanel" type="CanvasLayer"]
+layer = 10
+script = ExtResource("1_script")
+
+[node name="SafeArea" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
+mouse_filter = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="RightColumn" type="VBoxContainer" parent="SafeArea"]
+alignment = 2
+size_flags_horizontal = 8
+size_flags_vertical = 1
+mouse_filter = 2
+theme_override_constants/separation = 12
+
+[node name="ToastButton" type="Button" parent="SafeArea/RightColumn"]
+visible = false
+custom_minimum_size = Vector2(420, 0)
+text = "Dino Buddy has something to say..."
+clip_text = true
+alignment = 0
+size_flags_horizontal = 8
+mouse_default_cursor_shape = 2
+
+[node name="ChatPanel" type="PanelContainer" parent="SafeArea/RightColumn"]
+visible = false
+custom_minimum_size = Vector2(540, 360)
+size_flags_horizontal = 8
+size_flags_vertical = 1
+
+[node name="PanelMargin" type="MarginContainer" parent="SafeArea/RightColumn/ChatPanel"]
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="MainVBox" type="VBoxContainer" parent="SafeArea/RightColumn/ChatPanel/PanelMargin"]
+theme_override_constants/separation = 12
+
+[node name="HeaderRow" type="HBoxContainer" parent="SafeArea/RightColumn/ChatPanel/PanelMargin/MainVBox"]
+theme_override_constants/separation = 8
+
+[node name="TitleLabel" type="Label" parent="SafeArea/RightColumn/ChatPanel/PanelMargin/MainVBox/HeaderRow"]
+text = "Dino Buddy Link"
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
+
+[node name="StatusLabel" type="Label" parent="SafeArea/RightColumn/ChatPanel/PanelMargin/MainVBox/HeaderRow"]
+text = "Offline"
+horizontal_alignment = 2
+theme_override_font_sizes/font_size = 13
+
+[node name="ReconnectButton" type="Button" parent="SafeArea/RightColumn/ChatPanel/PanelMargin/MainVBox/HeaderRow"]
+visible = false
+text = "Reconnect"
+mouse_default_cursor_shape = 2
+
+[node name="CloseButton" type="Button" parent="SafeArea/RightColumn/ChatPanel/PanelMargin/MainVBox/HeaderRow"]
+text = "Close"
+mouse_default_cursor_shape = 2
+
+[node name="HintLabel" type="Label" parent="SafeArea/RightColumn/ChatPanel/PanelMargin/MainVBox"]
+text = "T: chat  |  Enter: type/send  |  1-4: quick chat  |  Wheel/PgUp/PgDn: scroll"
+theme_override_colors/font_color = Color(0.72, 0.78, 0.9, 1)
+theme_override_font_sizes/font_size = 13
+
+[node name="MessagesScroll" type="ScrollContainer" parent="SafeArea/RightColumn/ChatPanel/PanelMargin/MainVBox"]
+size_flags_vertical = 3
+follow_focus = true
+horizontal_scroll_mode = 0
+
+[node name="MessagesVBox" type="VBoxContainer" parent="SafeArea/RightColumn/ChatPanel/PanelMargin/MainVBox/MessagesScroll"]
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="ComposerRow" type="HBoxContainer" parent="SafeArea/RightColumn/ChatPanel/PanelMargin/MainVBox"]
+theme_override_constants/separation = 10
+
+[node name="MessageInput" type="LineEdit" parent="SafeArea/RightColumn/ChatPanel/PanelMargin/MainVBox/ComposerRow"]
+size_flags_horizontal = 3
+placeholder_text = "Talk to Dino Buddy..."
+clear_button_enabled = true
+
+[node name="SendButton" type="Button" parent="SafeArea/RightColumn/ChatPanel/PanelMargin/MainVBox/ComposerRow"]
+text = "Send"
+mouse_default_cursor_shape = 2
+
+[node name="PersonaRequest" type="HTTPRequest" parent="."]
+
+[node name="ChatRequest" type="HTTPRequest" parent="."]
+
+[node name="ProactiveRequest" type="HTTPRequest" parent="."]
+
+[node name="ThoughtDeliveredRequest" type="HTTPRequest" parent="."]
+
+[node name="HealthRequest" type="HTTPRequest" parent="."]
+
+[node name="ProactiveTimer" type="Timer" parent="."]
+wait_time = 25.0
+autostart = true
+
+[node name="BackendRetryTimer" type="Timer" parent="."]
+wait_time = 5.0

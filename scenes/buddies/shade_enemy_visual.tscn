@@ -1,0 +1,110 @@
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://scripts/buddies/buddy_animator.gd" id="1_animator"]
+
+[sub_resource type="SphereMesh" id="Sphere_core"]
+radius = 0.3
+height = 0.6
+radial_segments = 20
+rings = 12
+
+[sub_resource type="SphereMesh" id="Sphere_body"]
+radius = 0.36
+height = 0.7
+radial_segments = 20
+rings = 12
+
+[sub_resource type="PrismMesh" id="Prism_spike"]
+size = Vector3(0.12, 0.42, 0.12)
+
+[sub_resource type="PrismMesh" id="Prism_spike_large"]
+size = Vector3(0.16, 0.55, 0.16)
+
+[sub_resource type="TorusMesh" id="Torus_halo"]
+inner_radius = 0.34
+outer_radius = 0.45
+rings = 6
+ring_segments = 20
+
+[sub_resource type="StandardMaterial3D" id="Mat_core"]
+albedo_color = Color(0.85, 0.05, 0.12, 1)
+emission_enabled = true
+emission = Color(1, 0.15, 0.2, 1)
+emission_energy_multiplier = 3.8
+metallic = 0.3
+roughness = 0.15
+rim_enabled = true
+rim = 0.9
+rim_tint = 0.5
+
+[sub_resource type="StandardMaterial3D" id="Mat_halo"]
+albedo_color = Color(0.9, 0.1, 0.2, 0.5)
+transparency = 1
+emission_enabled = true
+emission = Color(1, 0.2, 0.25, 1)
+emission_energy_multiplier = 2.2
+shading_mode = 0
+
+[sub_resource type="StandardMaterial3D" id="Mat_shadow_body"]
+albedo_color = Color(0.05, 0.03, 0.08, 1)
+metallic = 0.2
+roughness = 0.55
+rim_enabled = true
+rim = 0.8
+rim_tint = 0.2
+emission_enabled = true
+emission = Color(0.4, 0.05, 0.1, 1)
+emission_energy_multiplier = 0.25
+
+[node name="ShadeEnemyVisual" type="Node3D"]
+script = ExtResource("1_animator")
+bob_amplitude = 0.06
+bob_speed = 1.2
+breath_amplitude = 0.06
+breath_speed = 1.8
+sway_amplitude = 0.06
+
+[node name="Root" type="Node3D" parent="."]
+
+[node name="Body" type="MeshInstance3D" parent="Root" groups=["buddy_palette_primary"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
+mesh = SubResource("Sphere_body")
+material_override = SubResource("Mat_shadow_body")
+
+[node name="Core" type="MeshInstance3D" parent="Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
+mesh = SubResource("Sphere_core")
+material_override = SubResource("Mat_core")
+
+[node name="Halo" type="MeshInstance3D" parent="Root"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, -0.707107, 0, 0.707107, 0.707107, 0, 0.7, 0)
+mesh = SubResource("Torus_halo")
+material_override = SubResource("Mat_halo")
+
+[node name="SpikeTop" type="MeshInstance3D" parent="Root" groups=["buddy_palette_accent"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.18, 0)
+mesh = SubResource("Prism_spike_large")
+
+[node name="SpikeF" type="MeshInstance3D" parent="Root" groups=["buddy_palette_accent"]]
+transform = Transform3D(1, 0, 0, 0, 0.866025, -0.5, 0, 0.5, 0.866025, 0, 1.05, -0.3)
+mesh = SubResource("Prism_spike")
+
+[node name="SpikeB" type="MeshInstance3D" parent="Root" groups=["buddy_palette_accent"]]
+transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 1.05, 0.3)
+mesh = SubResource("Prism_spike")
+
+[node name="SpikeL" type="MeshInstance3D" parent="Root" groups=["buddy_palette_accent"]]
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, -0.34, 0.95, 0.08)
+mesh = SubResource("Prism_spike")
+
+[node name="SpikeR" type="MeshInstance3D" parent="Root" groups=["buddy_palette_accent"]]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 0.34, 0.95, 0.08)
+mesh = SubResource("Prism_spike")
+
+[node name="SpikeLowerL" type="MeshInstance3D" parent="Root" groups=["buddy_palette_accent"]]
+transform = Transform3D(0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, -0.28, 0.55, 0.22)
+mesh = SubResource("Prism_spike")
+
+[node name="SpikeLowerR" type="MeshInstance3D" parent="Root" groups=["buddy_palette_accent"]]
+transform = Transform3D(0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, 0.5, 0.28, 0.55, 0.22)
+mesh = SubResource("Prism_spike")

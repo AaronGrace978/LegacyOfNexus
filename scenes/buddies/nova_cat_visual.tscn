@@ -1,0 +1,176 @@
+[gd_scene load_steps=17 format=3]
+
+[ext_resource type="Script" path="res://scripts/buddies/buddy_animator.gd" id="1_animator"]
+
+[sub_resource type="CapsuleMesh" id="Capsule_body"]
+radius = 0.24
+height = 0.95
+radial_segments = 20
+rings = 10
+
+[sub_resource type="SphereMesh" id="Sphere_head"]
+radius = 0.22
+height = 0.44
+radial_segments = 24
+rings = 14
+
+[sub_resource type="PrismMesh" id="Prism_ear"]
+size = Vector3(0.14, 0.22, 0.1)
+
+[sub_resource type="BoxMesh" id="Box_circuit"]
+size = Vector3(0.035, 0.015, 0.62)
+
+[sub_resource type="BoxMesh" id="Box_circuit_short"]
+size = Vector3(0.035, 0.015, 0.28)
+
+[sub_resource type="CapsuleMesh" id="Capsule_tail"]
+radius = 0.055
+height = 0.8
+radial_segments = 12
+rings = 6
+
+[sub_resource type="SphereMesh" id="Sphere_tail_tip"]
+radius = 0.09
+height = 0.18
+radial_segments = 14
+rings = 8
+
+[sub_resource type="CapsuleMesh" id="Capsule_leg"]
+radius = 0.065
+height = 0.34
+radial_segments = 10
+rings = 6
+
+[sub_resource type="SphereMesh" id="Sphere_eye"]
+radius = 0.055
+height = 0.11
+radial_segments = 12
+rings = 8
+
+[sub_resource type="BoxMesh" id="Box_whisker"]
+size = Vector3(0.24, 0.004, 0.004)
+
+[sub_resource type="StandardMaterial3D" id="Mat_eye"]
+albedo_color = Color(0.08, 0.95, 1, 1)
+emission_enabled = true
+emission = Color(0.4, 1, 1, 1)
+emission_energy_multiplier = 3.2
+metallic = 0.3
+roughness = 0.15
+rim_enabled = true
+rim = 0.9
+rim_tint = 0.8
+
+[sub_resource type="StandardMaterial3D" id="Mat_whisker"]
+albedo_color = Color(1, 1, 1, 0.65)
+transparency = 1
+emission_enabled = true
+emission = Color(0.6, 0.95, 1, 1)
+emission_energy_multiplier = 1.6
+shading_mode = 0
+
+[sub_resource type="StandardMaterial3D" id="Mat_leg"]
+albedo_color = Color(0.08, 0.08, 0.11, 1)
+metallic = 0.25
+roughness = 0.45
+rim_enabled = true
+rim = 0.55
+rim_tint = 0.7
+
+[node name="NovaCatVisual" type="Node3D"]
+script = ExtResource("1_animator")
+bob_amplitude = 0.04
+bob_speed = 1.8
+tail_wag_amplitude = 0.35
+tail_wag_speed = 2.4
+
+[node name="Root" type="Node3D" parent="."]
+
+[node name="Body" type="MeshInstance3D" parent="Root" groups=["buddy_palette_primary"]]
+transform = Transform3D(1, 0, 0, 0, 0.3, -0.954, 0, 0.954, 0.3, 0, 0.64, 0)
+mesh = SubResource("Capsule_body")
+
+[node name="CircuitSpine" type="MeshInstance3D" parent="Root" groups=["buddy_palette_accent"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.82, 0.05)
+mesh = SubResource("Box_circuit")
+
+[node name="CircuitLeft" type="MeshInstance3D" parent="Root" groups=["buddy_palette_accent"]]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -0.14, 0.7, -0.18)
+mesh = SubResource("Box_circuit_short")
+
+[node name="CircuitRight" type="MeshInstance3D" parent="Root" groups=["buddy_palette_accent"]]
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 0.14, 0.7, -0.18)
+mesh = SubResource("Box_circuit_short")
+
+[node name="Head" type="MeshInstance3D" parent="Root" groups=["buddy_palette_primary"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, -0.48)
+mesh = SubResource("Sphere_head")
+
+[node name="EarL" type="MeshInstance3D" parent="Root" groups=["buddy_palette_accent"]]
+transform = Transform3D(0.966, 0, -0.259, 0, 0.906, -0.423, 0.259, 0.423, 0.867, -0.12, 1.18, -0.55)
+mesh = SubResource("Prism_ear")
+
+[node name="EarR" type="MeshInstance3D" parent="Root" groups=["buddy_palette_accent"]]
+transform = Transform3D(0.966, 0, 0.259, 0, 0.906, -0.423, -0.259, 0.423, 0.867, 0.12, 1.18, -0.55)
+mesh = SubResource("Prism_ear")
+
+[node name="EyeL" type="MeshInstance3D" parent="Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.09, 0.98, -0.67)
+mesh = SubResource("Sphere_eye")
+material_override = SubResource("Mat_eye")
+
+[node name="EyeR" type="MeshInstance3D" parent="Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.09, 0.98, -0.67)
+mesh = SubResource("Sphere_eye")
+material_override = SubResource("Mat_eye")
+
+[node name="WhiskerL1" type="MeshInstance3D" parent="Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.24, 0.9, -0.62)
+mesh = SubResource("Box_whisker")
+material_override = SubResource("Mat_whisker")
+
+[node name="WhiskerL2" type="MeshInstance3D" parent="Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.23, 0.86, -0.62)
+mesh = SubResource("Box_whisker")
+material_override = SubResource("Mat_whisker")
+
+[node name="WhiskerR1" type="MeshInstance3D" parent="Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.24, 0.9, -0.62)
+mesh = SubResource("Box_whisker")
+material_override = SubResource("Mat_whisker")
+
+[node name="WhiskerR2" type="MeshInstance3D" parent="Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.23, 0.86, -0.62)
+mesh = SubResource("Box_whisker")
+material_override = SubResource("Mat_whisker")
+
+[node name="TailPivot" type="Node3D" parent="Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0.42)
+
+[node name="Tail" type="MeshInstance3D" parent="Root/TailPivot" groups=["buddy_palette_primary"]]
+transform = Transform3D(1, 0, 0, 0, 0.906, -0.423, 0, 0.423, 0.906, 0, 0.15, 0.3)
+mesh = SubResource("Capsule_tail")
+
+[node name="TailTip" type="MeshInstance3D" parent="Root/TailPivot" groups=["buddy_palette_accent"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0.55)
+mesh = SubResource("Sphere_tail_tip")
+
+[node name="LegFL" type="MeshInstance3D" parent="Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.18, 0.25, -0.28)
+mesh = SubResource("Capsule_leg")
+material_override = SubResource("Mat_leg")
+
+[node name="LegFR" type="MeshInstance3D" parent="Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.18, 0.25, -0.28)
+mesh = SubResource("Capsule_leg")
+material_override = SubResource("Mat_leg")
+
+[node name="LegBL" type="MeshInstance3D" parent="Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.18, 0.25, 0.22)
+mesh = SubResource("Capsule_leg")
+material_override = SubResource("Mat_leg")
+
+[node name="LegBR" type="MeshInstance3D" parent="Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.18, 0.25, 0.22)
+mesh = SubResource("Capsule_leg")
+material_override = SubResource("Mat_leg")

@@ -1,0 +1,97 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/battle/battle_action_ui.gd" id="1_script"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.0627451, 0.0862745, 0.152941, 0.92)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 0
+corner_radius_bottom_left = 0
+border_width_top = 2
+border_width_left = 2
+border_width_right = 2
+border_color = Color(0.294118, 0.482353, 0.870588, 0.65)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_swap_panel"]
+bg_color = Color(0.0588235, 0.0745098, 0.129412, 0.96)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+border_width_top = 2
+border_width_left = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.352941, 0.639216, 0.996078, 0.55)
+
+[node name="BattleActionUI" type="CanvasLayer"]
+script = ExtResource("1_script")
+
+[node name="BattleHud" type="MarginContainer" parent="."]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -220.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="Panel" type="PanelContainer" parent="BattleHud"]
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="VBox" type="VBoxContainer" parent="BattleHud/Panel"]
+theme_override_constants/separation = 12
+
+[node name="TurnLabel" type="Label" parent="BattleHud/Panel/VBox"]
+text = "Awaiting turn."
+horizontal_alignment = 1
+
+[node name="StatusLabel" type="Label" parent="BattleHud/Panel/VBox"]
+text = "Choose an action."
+horizontal_alignment = 1
+
+[node name="MoveButtons" type="GridContainer" parent="BattleHud/Panel/VBox"]
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 8
+columns = 3
+
+[node name="UtilityRow" type="HBoxContainer" parent="BattleHud/Panel/VBox"]
+alignment = 1
+theme_override_constants/separation = 10
+
+[node name="ItemButton" type="Button" parent="BattleHud/Panel/VBox/UtilityRow"]
+custom_minimum_size = Vector2(145, 48)
+text = "Item"
+
+[node name="SwapButton" type="Button" parent="BattleHud/Panel/VBox/UtilityRow"]
+custom_minimum_size = Vector2(145, 48)
+text = "Swap"
+
+[node name="RunButton" type="Button" parent="BattleHud/Panel/VBox/UtilityRow"]
+custom_minimum_size = Vector2(145, 48)
+text = "Run"
+
+[node name="SwapPanel" type="PanelContainer" parent="BattleHud"]
+visible = false
+size_flags_horizontal = 4
+size_flags_vertical = 8
+theme_override_styles/panel = SubResource("StyleBoxFlat_swap_panel")
+
+[node name="SwapVBox" type="VBoxContainer" parent="BattleHud/SwapPanel"]
+theme_override_constants/separation = 10
+
+[node name="SwapPrompt" type="Label" parent="BattleHud/SwapPanel/SwapVBox"]
+text = "Choose a Buddy to swap in."
+horizontal_alignment = 1
+
+[node name="SwapButtons" type="VBoxContainer" parent="BattleHud/SwapPanel/SwapVBox"]
+theme_override_constants/separation = 8
+
+[node name="CancelButton" type="Button" parent="BattleHud/SwapPanel/SwapVBox"]
+custom_minimum_size = Vector2(220, 42)
+text = "Cancel"

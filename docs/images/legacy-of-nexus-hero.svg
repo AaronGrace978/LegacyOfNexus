@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" role="img" aria-labelledby="title desc">
+  <title id="title">Legacy of Nexus Hero Banner</title>
+  <desc id="desc">Stylized landscape with a cute dinosaur companion silhouette at sunset.</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#5fa8ff" />
+      <stop offset="55%" stop-color="#6ed0d8" />
+      <stop offset="100%" stop-color="#f0e5b6" />
+    </linearGradient>
+    <linearGradient id="ground" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#1f5a3f" />
+      <stop offset="100%" stop-color="#173f31" />
+    </linearGradient>
+    <radialGradient id="sunGlow" cx="0.78" cy="0.22" r="0.2">
+      <stop offset="0%" stop-color="#fff5be" stop-opacity="0.95" />
+      <stop offset="100%" stop-color="#fff5be" stop-opacity="0" />
+    </radialGradient>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="5" flood-color="#0b2219" flood-opacity="0.35" />
+    </filter>
+  </defs>
+
+  <rect width="1200" height="420" fill="url(#sky)" />
+  <circle cx="940" cy="94" r="140" fill="url(#sunGlow)" />
+
+  <path d="M0 300 C180 260 310 300 470 286 C670 266 810 318 1200 270 L1200 420 L0 420 Z" fill="#2e7b55" opacity="0.95" />
+  <path d="M0 332 C260 288 430 350 660 324 C870 300 1000 342 1200 312 L1200 420 L0 420 Z" fill="url(#ground)" />
+
+  <g opacity="0.28" stroke="#9be1b5" stroke-width="4">
+    <line x1="94" y1="420" x2="114" y2="338" />
+    <line x1="148" y1="420" x2="168" y2="352" />
+    <line x1="220" y1="420" x2="228" y2="344" />
+    <line x1="1040" y1="420" x2="1024" y2="350" />
+    <line x1="1110" y1="420" x2="1094" y2="338" />
+  </g>
+
+  <g filter="url(#softShadow)" transform="translate(508 202)">
+    <ellipse cx="108" cy="134" rx="160" ry="30" fill="#102c21" opacity="0.45" />
+    <path d="M278 105 C336 100 406 110 468 146 C420 148 352 152 292 142 Z" fill="#1c4f38" />
+    <path d="M30 108 C12 124 4 146 12 168 C22 193 44 206 79 210 C140 215 206 198 242 168 C262 152 270 130 262 112 C250 84 208 70 152 70 C106 70 58 84 30 108 Z" fill="#2e8759" />
+    <path d="M152 70 C174 52 212 30 252 20 C280 14 312 18 325 38 C334 52 329 66 316 74 C292 90 246 96 216 98 Z" fill="#2a7a52" />
+    <ellipse cx="95" cy="125" rx="30" ry="25" fill="#f4f1d5" />
+    <circle cx="100" cy="124" r="12" fill="#322314" />
+    <circle cx="104" cy="120" r="4" fill="#ffffff" opacity="0.95" />
+    <path d="M62 140 C82 151 116 156 150 151" fill="none" stroke="#1a4a34" stroke-width="5" stroke-linecap="round" />
+    <path d="M172 144 C187 151 212 154 236 149" fill="none" stroke="#d6d0a8" stroke-width="6" stroke-linecap="round" opacity="0.75" />
+    <path d="M44 212 C26 240 22 266 34 296 L64 296 C54 265 56 237 74 214 Z" fill="#2a7c54" />
+    <path d="M198 212 C214 236 218 268 209 296 L240 296 C251 264 244 234 224 210 Z" fill="#2b7f56" />
+    <path d="M146 220 C164 246 168 270 160 296 L191 296 C201 264 196 240 176 214 Z" fill="#2a7a52" />
+    <path d="M246 126 C288 113 304 128 308 148 C309 162 301 170 288 172 C274 172 262 166 252 154 Z" fill="#2b8056" />
+    <path d="M308 138 C320 130 342 130 350 146 C354 157 348 170 336 173 C322 174 312 165 305 153 Z" fill="#2a7a52" />
+  </g>
+
+  <text x="56" y="84" fill="#f5fff8" font-size="44" font-family="Segoe UI, Arial, sans-serif" font-weight="700">Legacy of Nexus</text>
+  <text x="56" y="120" fill="#ddf4e7" font-size="20" font-family="Segoe UI, Arial, sans-serif">Buddy-driven RPG adventure prototype</text>
+</svg>

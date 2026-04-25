@@ -1,0 +1,27 @@
+{
+  "preferred_model": "llama",
+  "fallback_model": "llama",
+  "mistral": {
+    "enabled": true,
+    "api_key": null,
+    "model": "nchapman/ministral-8b-instruct-2410",
+    "temperature": 0.7,
+    "max_tokens": 8192
+  },
+  "llama": {
+    "enabled": true,
+    "base_url": "http://127.0.0.1:11434",
+    "model": "llama2:7b",
+    "temperature": 0.7,
+    "max_tokens": 8192
+  },
+  "qwen3": {
+    "enabled": true,
+    "base_url": "http://127.0.0.1:11434",
+    "model": "qwen2.5:7b",
+    "temperature": 0.7,
+    "max_tokens": 8192
+  },
+  "auto_fallback": true,
+  "health_check_interval": 300
+}

@@ -7,9 +7,11 @@ const QUATERNIUS_OVERWORLD_SCALE := Vector3(0.42, 0.42, 0.42)
 const SCULPT_OVERWORLD_SCALE := Vector3(0.42, 0.42, 0.42)
 const SPEECH_BUBBLE_LINE_LENGTH := 24
 const SPEECH_BUBBLE_BASE_HEIGHT := 2.7
-const SPEECH_BUBBLE_VIEWPORT_SIZE := Vector2i(384, 208)
-const SPEECH_BUBBLE_MIN_WIDTH := 180.0
-const SPEECH_BUBBLE_MAX_WIDTH := 304.0
+## 2× internal resolution so the billboard sprite stays sharp on high-DPI / Forward+.
+const SPEECH_BUBBLE_UI_SCALE := 2.0
+const SPEECH_BUBBLE_VIEWPORT_SIZE := Vector2i(768, 416)
+const SPEECH_BUBBLE_MIN_WIDTH := 360.0
+const SPEECH_BUBBLE_MAX_WIDTH := 608.0
 
 @export var min_follow_distance := 3.5
 @export var max_follow_distance := 5.8
@@ -142,7 +144,7 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	if player == null:
+	if player == null or not is_instance_valid(player):
 		return
 
 	_roam_cooldown = maxf(_roam_cooldown - delta, 0.0)
@@ -228,19 +230,20 @@ func show_speech_bubble(text: String, duration := 4.0) -> void:
 	_speech_bubble_root.visible = true
 	_speech_bubble_time_left = maxf(duration, 1.5)
 
-	var bubble_width := clampf(128.0 + float(longest) * 6.4, SPEECH_BUBBLE_MIN_WIDTH, SPEECH_BUBBLE_MAX_WIDTH)
-	var bubble_height := 58.0 + float(lines.size() - 1) * 28.0
+	var sc := SPEECH_BUBBLE_UI_SCALE
+	var bubble_width := clampf((128.0 + float(longest) * 6.4) * sc, SPEECH_BUBBLE_MIN_WIDTH, SPEECH_BUBBLE_MAX_WIDTH)
+	var bubble_height := (58.0 + float(lines.size() - 1) * 28.0) * sc
 	var panel_position := Vector2(
 		(float(SPEECH_BUBBLE_VIEWPORT_SIZE.x) - bubble_width) * 0.5,
-		16.0
+		16.0 * sc
 	)
 	_speech_bubble_panel.position = panel_position
 	_speech_bubble_panel.size = Vector2(bubble_width, bubble_height)
 	_speech_bubble_label.position = Vector2(0.0, 0.0)
-	_speech_bubble_label.custom_minimum_size = Vector2(bubble_width - 28.0, bubble_height - 22.0)
+	_speech_bubble_label.custom_minimum_size = Vector2(bubble_width - 28.0 * sc, bubble_height - 22.0 * sc)
 	_speech_bubble_tail.position = Vector2(
-		panel_position.x + bubble_width * 0.5 - 10.0,
-		panel_position.y + bubble_height - 4.0
+		panel_position.x + bubble_width * 0.5 - 10.0 * sc,
+		panel_position.y + bubble_height - 4.0 * sc
 	)
 	_speech_bubble_root.position = Vector3(0.0, SPEECH_BUBBLE_BASE_HEIGHT, 0.0)
 
@@ -679,6 +682,7 @@ func _build_speech_bubble() -> void:
 	_speech_bubble_viewport.transparent_bg = true
 	_speech_bubble_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	_speech_bubble_viewport.size = SPEECH_BUBBLE_VIEWPORT_SIZE
+	_speech_bubble_viewport.msaa_2d = Viewport.MSAA_2X
 	_speech_bubble_root.add_child(_speech_bubble_viewport)
 
 	var canvas := Control.new()
@@ -689,21 +693,24 @@ func _build_speech_bubble() -> void:
 	_speech_bubble_panel = PanelContainer.new()
 	_speech_bubble_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var panel_style := StyleBoxFlat.new()
-	panel_style.bg_color = Color(0.99, 1.0, 0.99, 0.96)
-	panel_style.border_color = Color(0.48, 0.68, 0.54, 0.95)
-	panel_style.set_border_width_all(3)
-	panel_style.set_corner_radius_all(22)
-	panel_style.shadow_color = Color(0.04, 0.08, 0.06, 0.16)
-	panel_style.shadow_size = 8
+	panel_style.bg_color = Color(0.97, 0.995, 0.99, 0.98)
+	panel_style.border_color = Color(0.28, 0.78, 0.62, 0.92)
+	panel_style.set_border_width_all(int(round(2.0 * SPEECH_BUBBLE_UI_SCALE)))
+	panel_style.set_corner_radius_all(int(round(22.0 * SPEECH_BUBBLE_UI_SCALE)))
+	panel_style.shadow_color = Color(0.02, 0.06, 0.12, 0.28)
+	panel_style.shadow_size = int(round(12.0 * SPEECH_BUBBLE_UI_SCALE))
+	panel_style.shadow_offset = Vector2(0, int(round(3.0 * SPEECH_BUBBLE_UI_SCALE)))
 	panel_style.set_content_margin_all(0)
 	_speech_bubble_panel.add_theme_stylebox_override("panel", panel_style)
 	canvas.add_child(_speech_bubble_panel)
 
 	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 14)
-	margin.add_theme_constant_override("margin_top", 11)
-	margin.add_theme_constant_override("margin_right", 14)
-	margin.add_theme_constant_override("margin_bottom", 11)
+	var m := int(round(14.0 * SPEECH_BUBBLE_UI_SCALE))
+	var mt := int(round(11.0 * SPEECH_BUBBLE_UI_SCALE))
+	margin.add_theme_constant_override("margin_left", m)
+	margin.add_theme_constant_override("margin_top", mt)
+	margin.add_theme_constant_override("margin_right", m)
+	margin.add_theme_constant_override("margin_bottom", mt)
 	margin.set_anchors_preset(Control.PRESET_FULL_RECT)
 	margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_speech_bubble_panel.add_child(margin)
@@ -713,14 +720,20 @@ func _build_speech_bubble() -> void:
 	_speech_bubble_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_speech_bubble_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_speech_bubble_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	_speech_bubble_label.add_theme_font_size_override("font_size", 24)
-	_speech_bubble_label.add_theme_color_override("font_color", Color(0.10, 0.16, 0.12, 1.0))
+	_speech_bubble_label.add_theme_font_size_override("font_size", int(round(24.0 * SPEECH_BUBBLE_UI_SCALE)))
+	_speech_bubble_label.add_theme_color_override("font_color", Color(0.06, 0.14, 0.11, 1.0))
+	_speech_bubble_label.add_theme_color_override("font_shadow_color", Color(0.02, 0.08, 0.06, 0.22))
+	_speech_bubble_label.add_theme_constant_override("shadow_offset_x", int(round(1.0 * SPEECH_BUBBLE_UI_SCALE)))
+	_speech_bubble_label.add_theme_constant_override("shadow_offset_y", int(round(2.0 * SPEECH_BUBBLE_UI_SCALE)))
+	_speech_bubble_label.add_theme_constant_override("outline_size", int(round(3.0 * SPEECH_BUBBLE_UI_SCALE)))
+	_speech_bubble_label.add_theme_color_override("font_outline_color", Color(0.88, 0.98, 0.94, 0.55))
 	_speech_bubble_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	margin.add_child(_speech_bubble_label)
 
 	_speech_bubble_tail = ColorRect.new()
-	_speech_bubble_tail.color = Color(0.99, 1.0, 0.99, 0.96)
-	_speech_bubble_tail.size = Vector2(20.0, 20.0)
+	_speech_bubble_tail.color = Color(0.94, 0.99, 0.97, 0.98)
+	var tail_sz := 20.0 * SPEECH_BUBBLE_UI_SCALE
+	_speech_bubble_tail.size = Vector2(tail_sz, tail_sz)
 	_speech_bubble_tail.rotation_degrees = 45.0
 	_speech_bubble_tail.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	canvas.add_child(_speech_bubble_tail)
@@ -728,8 +741,10 @@ func _build_speech_bubble() -> void:
 	_speech_bubble_sprite = Sprite3D.new()
 	_speech_bubble_sprite.texture = _speech_bubble_viewport.get_texture()
 	_speech_bubble_sprite.billboard = BaseMaterial3D.BILLBOARD_ENABLED
-	_speech_bubble_sprite.pixel_size = 0.0051
+	_speech_bubble_sprite.pixel_size = 0.0051 / SPEECH_BUBBLE_UI_SCALE
 	_speech_bubble_sprite.centered = true
+	_speech_bubble_sprite.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+	_speech_bubble_sprite.modulate = Color.WHITE
 	_speech_bubble_root.add_child(_speech_bubble_sprite)
 
 
@@ -887,7 +902,9 @@ func _apply_imported_palette(mesh_node: MeshInstance3D, primary: Color, accent: 
 		# eye / halo / primitive meshes never export COLOR_0. Use vertex colors
 		# directly as albedo instead of Godot's default-imported flat material.
 		if surface_has_vertex_colors or is_sculpt_skin_mesh or "dinosculpt" in material_name:
-			override_material = _make_vertex_color_material(Color(1.0, 1.0, 1.0, 1.0), 0.6)
+			override_material = _make_vertex_color_material(
+				Color(1.0, 1.0, 1.0, 1.0), 0.5, source_material
+			)
 		elif "dino_main" in material_name:
 			override_material = _make_imported_material(primary.lightened(0.05), 0.58)
 		elif "dino_secondary" in material_name:
@@ -897,10 +914,15 @@ func _apply_imported_palette(mesh_node: MeshInstance3D, primary: Color, accent: 
 		elif "dino_teeth" in material_name:
 			override_material = _make_imported_material(Color(0.98, 0.96, 0.90, 1.0), 0.78)
 		elif "dinoeyewhite" in material_name or "eye_white" in material_name:
-			# Keep a bright sclera to match the reference character look.
-			override_material = _make_imported_material(Color(0.93, 0.93, 0.90, 1.0), 0.36)
+			# Bright wet sclera (Pixar / feature-film board style).
+			override_material = _make_imported_material(Color(0.95, 0.95, 0.93, 1.0), 0.26)
+			override_material.metallic_specular = 0.58
 		elif "dinoeyeiris" in material_name:
-			override_material = _make_imported_material(Color(0.35, 0.24, 0.12, 1.0), 0.44)
+			override_material = _make_imported_material(Color(0.48, 0.32, 0.10, 1.0), 0.24)
+			override_material.metallic_specular = 0.52
+			override_material.clearcoat_enabled = true
+			override_material.clearcoat = 0.38
+			override_material.clearcoat_roughness = 0.14
 		elif "dinoeyepupil" in material_name or "eye_black" in material_name:
 			override_material = _make_imported_material(Color(0.02, 0.015, 0.01, 1.0), 0.35)
 		elif "dinoeyehighlight" in material_name:
@@ -910,8 +932,10 @@ func _apply_imported_palette(mesh_node: MeshInstance3D, primary: Color, accent: 
 		# null materials can trigger renderer errors on some Godot/Vulkan setups.
 		if override_material == null:
 			if source_material != null:
-				override_material = source_material.duplicate() as Material
-			else:
+				var dup: Resource = source_material.duplicate()
+				if dup is Material:
+					override_material = dup as Material
+			if override_material == null:
 				override_material = _make_imported_material(primary, 0.62)
 		mesh_node.set_surface_override_material(surface_index, override_material)
 
@@ -923,7 +947,7 @@ func _make_imported_material(color: Color, roughness: float, emission: Color = C
 	# Keep buddy surfaces non-metallic and less mirror-like so outdoor sky tint
 	# does not wash skin toward cyan under Forward+ lighting.
 	mat.metallic = 0.0
-	mat.specular = 0.22
+	mat.metallic_specular = 0.22
 	if emission_strength > 0.0:
 		mat.emission_enabled = true
 		mat.emission = emission
@@ -931,14 +955,28 @@ func _make_imported_material(color: Color, roughness: float, emission: Color = C
 	return mat
 
 
-func _make_vertex_color_material(tint: Color, roughness: float) -> StandardMaterial3D:
+func _make_vertex_color_material(tint: Color, roughness: float, source_material: Material = null) -> StandardMaterial3D:
 	var mat := StandardMaterial3D.new()
 	mat.vertex_color_use_as_albedo = true
 	# Sculpt vertex colors are authored in sRGB space in Blender color tools.
 	# Decoding them as sRGB in Godot preserves the intended darker green ramp.
 	mat.vertex_color_is_srgb = true
 	mat.albedo_color = tint
-	mat.roughness = maxf(roughness, 0.72)
+	# Satin skin (not chalky matte) so scale edges catch soft highlights like the reference.
+	mat.roughness = clampf(roughness, 0.42, 0.62)
 	mat.metallic = 0.0
-	mat.specular = 0.18
+	mat.metallic_specular = 0.42
+	# Real-time approximation of the reference boards' subsurface flesh (Godot 4.6+ API).
+	mat.subsurf_scatter_enabled = true
+	mat.subsurf_scatter_skin_mode = true
+	mat.subsurf_scatter_strength = 0.27
+	mat.subsurf_scatter_transmittance_enabled = true
+	mat.subsurf_scatter_transmittance_color = Color(0.42, 0.62, 0.32)
+	mat.subsurf_scatter_transmittance_depth = 0.18
+	if source_material is StandardMaterial3D:
+		var src := source_material as StandardMaterial3D
+		if src.normal_texture != null:
+			mat.normal_enabled = true
+			mat.normal_texture = src.normal_texture
+			mat.normal_scale = src.normal_scale
 	return mat

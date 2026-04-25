@@ -1,0 +1,77 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="PackedScene" path="res://art/exports/dino_buddy/dino_buddy_quaternius.glb" id="1_dino_model"]
+[ext_resource type="Script" path="res://scripts/buddies/buddy_animator.gd" id="2_animator"]
+
+[sub_resource type="CapsuleMesh" id="Capsule_tail_base"]
+radius = 0.12
+height = 0.68
+radial_segments = 14
+rings = 8
+
+[sub_resource type="SphereMesh" id="Sphere_tail_tip"]
+radius = 0.16
+height = 0.32
+radial_segments = 16
+rings = 10
+
+[sub_resource type="PrismMesh" id="Prism_tail_spike"]
+size = Vector3(0.09, 0.28, 0.12)
+
+[sub_resource type="SphereMesh" id="Sphere_halo"]
+radius = 0.08
+height = 0.16
+radial_segments = 12
+rings = 8
+
+[sub_resource type="StandardMaterial3D" id="Mat_halo"]
+albedo_color = Color(0.6, 0.95, 1, 1)
+emission_enabled = true
+emission = Color(0.5, 1, 1, 1)
+emission_energy_multiplier = 3.5
+metallic = 0.1
+roughness = 0.1
+shading_mode = 0
+
+[node name="DinoBuddyVisual" type="Node3D"]
+script = ExtResource("2_animator")
+bob_amplitude = 0.02
+bob_speed = 1.4
+breath_amplitude = 0.02
+tail_wag_amplitude = 0.3
+tail_wag_speed = 2.0
+yaw_drift_amplitude = 0.04
+
+[node name="ImportedDino" parent="." instance=ExtResource("1_dino_model")]
+rotation = Vector3(0, 3.14159, 0)
+
+[node name="TailPivot" type="Node3D" parent="."]
+position = Vector3(0, 1.08, 0.62)
+rotation = Vector3(0.95, 0, 0)
+
+[node name="TailBase" type="MeshInstance3D" parent="TailPivot" groups=["buddy_palette_primary"]]
+position = Vector3(0, 0.34, 0)
+mesh = SubResource("Capsule_tail_base")
+
+[node name="TailTip" type="MeshInstance3D" parent="TailPivot" groups=["buddy_palette_accent"]]
+position = Vector3(0, 0.78, 0)
+mesh = SubResource("Sphere_tail_tip")
+
+[node name="TailSpikeL" type="MeshInstance3D" parent="TailPivot" groups=["buddy_palette_accent"]]
+position = Vector3(-0.09, 0.56, -0.02)
+rotation = Vector3(0, 0, 0.44)
+mesh = SubResource("Prism_tail_spike")
+
+[node name="TailSpikeR" type="MeshInstance3D" parent="TailPivot" groups=["buddy_palette_accent"]]
+position = Vector3(0.09, 0.56, -0.02)
+rotation = Vector3(0, 0, -0.44)
+mesh = SubResource("Prism_tail_spike")
+
+[node name="TailSpikeTop" type="MeshInstance3D" parent="TailPivot" groups=["buddy_palette_accent"]]
+position = Vector3(0, 0.65, 0.04)
+mesh = SubResource("Prism_tail_spike")
+
+[node name="Halo" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, -0.15)
+mesh = SubResource("Sphere_halo")
+material_override = SubResource("Mat_halo")

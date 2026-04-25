@@ -1,0 +1,25 @@
+{
+  "items": [
+    {
+      "id": "repair_gel",
+      "label": "Repair Gel",
+      "description": "Restore HP to the user.",
+      "kind": "heal_self",
+      "heal_amount": 14
+    },
+    {
+      "id": "team_salve",
+      "label": "Team Salve",
+      "description": "Restore HP to all standing allies.",
+      "kind": "heal_all_allies",
+      "heal_amount": 9
+    },
+    {
+      "id": "reboot_chip",
+      "label": "Reboot Chip",
+      "description": "Revive a defeated partner with partial HP.",
+      "kind": "revive_partner",
+      "hp_fraction": 0.32
+    }
+  ]
+}

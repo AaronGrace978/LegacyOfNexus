@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/wild_buddy.gd" id="1_script"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_body"]
+radius = 0.45
+
+[node name="WildBuddy" type="Node3D"]
+script = ExtResource("1_script")
+
+[node name="ModelHolder" type="Node3D" parent="."]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("SphereShape3D_body")
+
+[node name="PromptLabel" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
+billboard = 1
+text = "Press E to Capture"
+visible = false

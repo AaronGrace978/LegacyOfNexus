@@ -1,0 +1,78 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/battle/battle_unit.gd" id="1_script"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_collision"]
+radius = 0.45
+height = 1.0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_ring"]
+top_radius = 0.72
+bottom_radius = 0.72
+height = 0.04
+radial_segments = 32
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_shadow"]
+top_radius = 0.92
+bottom_radius = 1.02
+height = 0.02
+radial_segments = 32
+rings = 1
+
+[sub_resource type="BoxMesh" id="BoxMesh_health_bar"]
+size = Vector3(1.2, 0.12, 0.08)
+
+[sub_resource type="BoxMesh" id="BoxMesh_health_fill"]
+size = Vector3(1.2, 0.08, 0.05)
+
+[node name="BattleUnit" type="Node3D"]
+script = ExtResource("1_script")
+
+[node name="CollisionArea" type="Area3D" parent="."]
+input_ray_pickable = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionArea"]
+position = Vector3(0, 0.95, 0)
+shape = SubResource("CapsuleShape3D_collision")
+
+[node name="SelectionRing" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.03, 0)
+mesh = SubResource("CylinderMesh_ring")
+visible = false
+
+[node name="ShadowDisc" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.011, 0)
+mesh = SubResource("CylinderMesh_shadow")
+
+[node name="Pivot" type="Node3D" parent="."]
+
+[node name="VisualSlot" type="Node3D" parent="Pivot"]
+
+[node name="NameLabel" type="Label3D" parent="Pivot"]
+position = Vector3(0, 2.2, 0)
+billboard = 1
+text = "Buddy"
+
+[node name="HealthLabel" type="Label3D" parent="Pivot"]
+position = Vector3(0, 1.95, 0)
+billboard = 1
+text = "HP 24/24"
+
+[node name="CaptureReadyLabel" type="Label3D" parent="Pivot"]
+position = Vector3(0, 2.48, 0)
+billboard = 1
+modulate = Color(0.470588, 0.94902, 1, 1)
+outline_modulate = Color(0.0313726, 0.0470588, 0.0980392, 1)
+text = "SYNC READY"
+visible = false
+
+[node name="HealthBarRoot" type="Node3D" parent="Pivot"]
+position = Vector3(0, 1.73, 0)
+
+[node name="HealthBarBack" type="MeshInstance3D" parent="Pivot/HealthBarRoot"]
+mesh = SubResource("BoxMesh_health_bar")
+
+[node name="HealthBarFill" type="MeshInstance3D" parent="Pivot/HealthBarRoot"]
+position = Vector3(0, 0, 0.01)
+mesh = SubResource("BoxMesh_health_fill")

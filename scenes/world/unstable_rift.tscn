@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/unstable_rift.gd" id="1_script"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_rift"]
+radius = 2.8
+radial_segments = 16
+rings = 8
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rift"]
+transparency = 1
+albedo_color = Color(0.55, 0.25, 0.95, 0.35)
+emission_enabled = true
+emission = Color(0.45, 0.2, 0.9, 1)
+emission_energy_multiplier = 0.85
+
+[node name="UnstableRift" type="Node3D"]
+script = ExtResource("1_script")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_rift")
+surface_material_override/0 = SubResource("StandardMaterial3D_rift")

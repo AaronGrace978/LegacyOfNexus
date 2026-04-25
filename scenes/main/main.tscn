@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/main/game_root.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/ui/dino_chat_panel.tscn" id="2_chat_panel"]
+
+[node name="GameRoot" type="Node3D"]
+script = ExtResource("1_script")
+
+[node name="ActiveScene" type="Node3D" parent="."]
+
+[node name="DinoChatPanel" parent="." instance=ExtResource("2_chat_panel")]

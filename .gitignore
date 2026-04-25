@@ -1,0 +1,22 @@
+# Godot 4
+.godot/
+
+# Python
+**/__pycache__/
+*.pyc
+
+# Local vendored test corpus (glTF sample models; large, not game source)
+.tools/
+
+# Portable engine / installer — keep local only
+*.exe
+*.msi
+/Blender/
+
+# Nested clone (track separately or remove inner .git to vendor)
+/LoveSong/
+
+# Logs
+logs/
+dino_backend_log.txt
+*.log

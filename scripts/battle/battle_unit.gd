@@ -258,8 +258,17 @@ func set_facing_direction(direction: Vector3) -> void:
 	flat_direction.y = 0.0
 	if flat_direction.length_squared() <= 0.001:
 		return
+	face_toward_point(global_position + flat_direction.normalized())
 
-	rotation.y = atan2(flat_direction.x, flat_direction.z)
+
+## Rotate so local -Z points horizontally toward `world_point` (Godot look_at convention).
+func face_toward_point(world_point: Vector3) -> void:
+	var target := world_point
+	target.y = global_position.y
+	var to_target := target - global_position
+	if to_target.length_squared() < 0.0001:
+		return
+	look_at(target, Vector3.UP)
 
 
 func play_battle_victory() -> void:
@@ -378,6 +387,7 @@ func _apply_palette_to_visual_subtree(root: Node) -> void:
 		if mesh_node.is_in_group("buddy_palette_primary"):
 			var body_material := StandardMaterial3D.new()
 			body_material.albedo_color = primary_color
+			body_material.vertex_color_use_as_albedo = false
 			body_material.roughness = 0.38
 			body_material.metallic = 0.1
 			body_material.metallic_specular = 0.65
@@ -394,6 +404,7 @@ func _apply_palette_to_visual_subtree(root: Node) -> void:
 		elif mesh_node.is_in_group("buddy_palette_accent"):
 			var accent_material := StandardMaterial3D.new()
 			accent_material.albedo_color = accent_color
+			accent_material.vertex_color_use_as_albedo = false
 			accent_material.roughness = 0.22
 			accent_material.metallic = 0.3
 			accent_material.metallic_specular = 0.85
@@ -469,29 +480,82 @@ func _apply_imported_palette(mesh_node: MeshInstance3D) -> void:
 
 		var override_material: Material = null
 		if "dino_main" in material_name:
-			override_material = _make_imported_material(primary_color.lightened(0.08), 0.62)
+			override_material = _make_imported_material(primary_color.lightened(0.08), 0.45, primary_color * 0.12, 0.2)
 		elif "dino_secondary" in material_name:
-			override_material = _make_imported_material(accent_color, 0.48, accent_color * 0.18, 0.18)
+			override_material = _make_imported_material(accent_color, 0.38, accent_color * 0.22, 0.22)
 		elif "dino_tongue" in material_name:
 			override_material = _make_invisible_material()
 		elif "dino_teeth" in material_name:
-			override_material = _make_imported_material(Color(0.98, 0.96, 0.90, 1.0), 0.78)
+			override_material = _make_imported_material(Color(0.98, 0.96, 0.90, 1.0), 0.65)
 		elif "eye_white" in material_name:
-			override_material = _make_imported_material(Color(0.98, 0.99, 1.0, 1.0), 0.28)
+			override_material = _make_imported_material(Color(0.98, 0.99, 1.0, 1.0), 0.22)
 		elif "eye_black" in material_name:
-			override_material = _make_imported_material(Color(0.08, 0.10, 0.12, 1.0), 0.22)
+			override_material = _make_imported_material(Color(0.06, 0.08, 0.10, 1.0), 0.18, Color(0.2, 0.25, 0.35, 1.0), 0.35)
+
+		if override_material == null and unit_name == "Dino Buddy":
+			override_material = _polish_dino_sculpt_surface(source_material, material_name)
 
 		if override_material != null:
 			mesh_node.set_surface_override_material(surface_index, override_material)
 		elif mesh_node.get_active_material(surface_index) == null:
-			mesh_node.set_surface_override_material(surface_index, _make_imported_material(primary_color, 0.62))
+			mesh_node.set_surface_override_material(surface_index, _make_imported_material(primary_color, 0.45, primary_color * 0.1, 0.18))
+
+
+func _polish_dino_sculpt_surface(source_material: Material, material_name: String) -> Material:
+	var mn := material_name
+	if "eye" in mn and ("black" in mn or "pupil" in mn or "iris" in mn or "cornea" in mn):
+		var eye_dark := StandardMaterial3D.new()
+		eye_dark.albedo_color = Color(0.08, 0.09, 0.12, 1.0)
+		eye_dark.roughness = 0.14
+		eye_dark.metallic = 0.35
+		eye_dark.metallic_specular = 0.9
+		eye_dark.clearcoat_enabled = true
+		eye_dark.clearcoat = 0.55
+		eye_dark.clearcoat_roughness = 0.22
+		return eye_dark
+	if "eye" in mn or "sclera" in mn:
+		var eye_white := StandardMaterial3D.new()
+		eye_white.albedo_color = Color(0.96, 0.98, 1.0, 1.0)
+		eye_white.roughness = 0.32
+		eye_white.metallic_specular = 0.55
+		eye_white.rim_enabled = true
+		eye_white.rim = 0.42
+		eye_white.rim_tint = 0.65
+		return eye_white
+	if "mouth" in mn or "teeth" in mn or "tooth" in mn:
+		return _make_imported_material(Color(0.96, 0.94, 0.88, 1.0), 0.58)
+	if source_material is StandardMaterial3D:
+		var src := source_material as StandardMaterial3D
+		var m := src.duplicate() as StandardMaterial3D
+		m.vertex_color_use_as_albedo = false
+		m.vertex_color_is_srgb = true
+		m.albedo_color = primary_color.lightened(0.06)
+		m.roughness = clampf(m.roughness * 0.82, 0.22, 0.52)
+		m.metallic = clampf(m.metallic + 0.06, 0.0, 0.18)
+		m.metallic_specular = 0.58
+		m.rim_enabled = true
+		m.rim = 0.48
+		m.rim_tint = 0.72
+		m.clearcoat_enabled = true
+		m.clearcoat = 0.18
+		m.clearcoat_roughness = 0.38
+		m.emission_enabled = true
+		m.emission = primary_color * 0.12
+		m.emission_energy_multiplier = 0.35
+		return m
+	return _make_imported_material(primary_color.lightened(0.05), 0.4, primary_color * 0.14, 0.22)
 
 
 func _make_imported_material(color: Color, roughness: float, emission: Color = Color(0, 0, 0, 1), emission_strength := 0.0) -> StandardMaterial3D:
 	var mat := StandardMaterial3D.new()
 	mat.albedo_color = color
 	mat.roughness = roughness
-	mat.metallic = 0.03
+	mat.metallic = 0.05
+	mat.metallic_specular = 0.55
+	mat.vertex_color_use_as_albedo = false
+	mat.rim_enabled = true
+	mat.rim = 0.42
+	mat.rim_tint = 0.7
 	if emission_strength > 0.0:
 		mat.emission_enabled = true
 		mat.emission = emission

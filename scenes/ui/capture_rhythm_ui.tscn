@@ -1,0 +1,122 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/capture_rhythm_ui.gd" id="1_script"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_spark"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(180, 120, 0)
+direction = Vector3(0, -1, 0)
+spread = 35.0
+initial_velocity_min = 90.0
+initial_velocity_max = 220.0
+gravity = Vector3(0, 120, 0)
+scale_min = 2.0
+scale_max = 4.5
+color = Color(0.45, 0.95, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.07, 0.09, 0.14, 0.92)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.45, 0.95, 1, 0.55)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+content_margin_left = 18
+content_margin_top = 16
+content_margin_right = 18
+content_margin_bottom = 16
+
+[node name="CaptureRhythmUI" type="CanvasLayer"]
+layer = 90
+script = ExtResource("1_script")
+
+[node name="Margin" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="Panel" type="PanelContainer" parent="Margin"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="VBox" type="VBoxContainer" parent="Margin/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="TitleLabel" type="Label" parent="Margin/Panel/VBox"]
+layout_mode = 2
+text = "Capture"
+horizontal_alignment = 1
+
+[node name="InstructionLabel" type="Label" parent="Margin/Panel/VBox"]
+layout_mode = 2
+text = "Press Space or Left Click on the beat."
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="BeatLabel" type="Label" parent="Margin/Panel/VBox"]
+layout_mode = 2
+text = "Beat: 0 / 9"
+horizontal_alignment = 1
+
+[node name="TimingLabel" type="Label" parent="Margin/Panel/VBox"]
+layout_mode = 2
+text = "Timing: ---"
+horizontal_alignment = 1
+
+[node name="BeatTrack" type="HBoxContainer" parent="Margin/Panel/VBox"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 8
+
+[node name="PulseRing" type="Control" parent="Margin/Panel/VBox"]
+custom_minimum_size = Vector2(220, 220)
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="BeatMarker" type="ColorRect" parent="Margin/Panel/VBox/PulseRing"]
+layout_mode = 0
+offset_left = 35.0
+offset_top = 35.0
+offset_right = 185.0
+offset_bottom = 185.0
+color = Color(1, 0.85, 0.35, 0.35)
+
+[node name="SuccessLabel" type="Label" parent="Margin/Panel/VBox"]
+visible = false
+layout_mode = 2
+text = "Captured!"
+horizontal_alignment = 1
+
+[node name="Particles" type="GPUParticles2D" parent="Margin/Panel/VBox"]
+z_index = 5
+layout_mode = 2
+emitting = false
+amount = 90
+lifetime = 0.85
+one_shot = true
+explosiveness = 0.85
+randomness = 0.35
+process_material = SubResource("ParticleProcessMaterial_spark")
+
+[node name="CaptureFlash" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.9, 1, 1, 0)
