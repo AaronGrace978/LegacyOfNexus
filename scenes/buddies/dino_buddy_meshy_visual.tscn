@@ -1,0 +1,58 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="PackedScene" path="res://art/exports/dino_buddy/dino_buddy_meshy_character.glb" id="1_dino_model"]
+[ext_resource type="Script" path="res://scripts/buddies/buddy_animator.gd" id="2_animator"]
+[ext_resource type="Script" path="res://scripts/buddies/meshy_animation_merger.gd" id="3_merger"]
+
+[sub_resource type="SphereMesh" id="Sphere_halo"]
+radius = 0.08
+height = 0.16
+radial_segments = 12
+rings = 8
+
+[sub_resource type="StandardMaterial3D" id="Mat_halo"]
+albedo_color = Color(0.6, 0.95, 1, 1)
+emission_enabled = true
+emission = Color(0.5, 1, 1, 1)
+emission_energy_multiplier = 3.5
+metallic = 0.1
+roughness = 0.1
+shading_mode = 0
+
+[node name="DinoBuddyVisual" type="Node3D"]
+script = ExtResource("2_animator")
+bob_amplitude = 0.012
+bob_speed = 1.1
+breath_amplitude = 0.018
+tail_wag_amplitude = 0.0
+tail_wag_speed = 0.0
+yaw_drift_amplitude = 0.0
+
+[node name="ImportedDino" parent="." instance=ExtResource("1_dino_model")]
+rotation = Vector3(0, 3.14159, 0)
+
+[node name="MeshyAnimationMerger" type="Node" parent="ImportedDino"]
+script = ExtResource("3_merger")
+animation_sources = Array[String]([
+"res://art/exports/dino_buddy/dino_buddy_meshy_walk.glb",
+"res://art/exports/dino_buddy/dino_buddy_meshy_run.glb"
+])
+animation_aliases = {
+"Walk": "Walk",
+"Walking": "Walk",
+"Walking|Walking": "Walk",
+"Armature|Walking": "Walk",
+"Armature|Walk": "Walk",
+"CharacterArmature|Walk": "Walk",
+"Run": "Run",
+"Running": "Run",
+"Running|Running": "Run",
+"Armature|Running": "Run",
+"Armature|Run": "Run",
+"CharacterArmature|Run": "Run"
+}
+
+[node name="Halo" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, -0.15)
+mesh = SubResource("Sphere_halo")
+material_override = SubResource("Mat_halo")

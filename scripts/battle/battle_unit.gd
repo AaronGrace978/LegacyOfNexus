@@ -7,6 +7,8 @@ const BATTLE_IDLE_ANIMS: Array[StringName] = [&"BattleIdle", &"CharacterArmature
 const BATTLE_ATTACK_ANIMS: Array[StringName] = [&"Attack", &"CharacterArmature|Punch", &"Punch", &"CharacterArmature|Weapon", &"Weapon"]
 const BATTLE_VICTORY_ANIMS: Array[StringName] = [&"Victory", &"CharacterArmature|Wave", &"Wave", &"CharacterArmature|Yes", &"Yes"]
 const QUATERNIUS_BATTLE_SCALE := Vector3(0.34, 0.34, 0.34)
+## Meshy AI exports come in roughly 1m bind-pose space; tone down for arena framing.
+const MESHY_BATTLE_SCALE := Vector3(0.95, 0.95, 0.95)
 
 signal attack_hit(attacker: BattleUnit, target: BattleUnit)
 signal attack_finished(attacker: BattleUnit)
@@ -459,7 +461,10 @@ func _find_first_animation_player(node: Node) -> AnimationPlayer:
 
 
 func _apply_model_presentation(model_root: Node3D, display_name: String) -> void:
-	if display_name == "Dino Buddy" and _is_quaternius_dino_model(model_root):
+	if display_name == "Dino Buddy" and _is_meshy_dino_model(model_root):
+		model_root.scale = MESHY_BATTLE_SCALE
+		model_root.position = Vector3(0.0, -0.05, 0.0)
+	elif display_name == "Dino Buddy" and _is_quaternius_dino_model(model_root):
 		model_root.scale = QUATERNIUS_BATTLE_SCALE
 		model_root.position = Vector3(0.0, -0.58, 0.0)
 
@@ -468,7 +473,17 @@ func _is_quaternius_dino_model(root: Node) -> bool:
 	return root != null and root.find_child("CharacterArmature", true, false) != null and root.find_child("Dino", true, false) != null
 
 
+func _is_meshy_dino_model(root: Node) -> bool:
+	# `MeshyAnimationMerger` is added explicitly inside the Meshy visual scene,
+	# so its presence is a reliable signal we should preserve baked PBR.
+	return root != null and root.find_child("MeshyAnimationMerger", true, false) != null
+
+
 func _apply_imported_palette(mesh_node: MeshInstance3D) -> void:
+	if visual_slot != null and _is_meshy_dino_model(visual_slot):
+		# Meshy GLBs ship baked PBR; preserve their textures rather than
+		# stamping the buddy palette over them.
+		return
 	var surface_count := mesh_node.mesh.get_surface_count()
 	for surface_index in range(surface_count):
 		var source_material: Material = mesh_node.get_active_material(surface_index)

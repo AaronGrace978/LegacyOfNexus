@@ -61,7 +61,10 @@ Legacy of Nexus is a Godot 4 action-RPG prototype focused on companion-driven ex
 
 ## Dino Buddy Notes
 
-- Live Dino Buddy visual scene: `res://scenes/buddies/dino_buddy_visual.tscn`
+- Live Dino Buddy visual scene: `res://scenes/buddies/dino_buddy_meshy_visual.tscn`
+  (Meshy AI emerald baby dinosaur — see `art/exports/dino_buddy/README_MESHY.md`).
+  Hand-sculpt and Quaternius variants remain wired and selectable via
+  `data/buddies/buddy_definitions.json`.
 - Buddy data source: `data/buddies/buddy_definitions.json`
 - Follower controller: `scripts/player/dino_buddy.gd`
 

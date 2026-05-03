@@ -5,6 +5,8 @@ const OVERWORLD_WALK_ANIMS: Array[StringName] = [&"Walk", &"CharacterArmature|Wa
 const OVERWORLD_HAPPY_ANIMS: Array[StringName] = [&"HappyChirp", &"CharacterArmature|Yes", &"CharacterArmature|Wave", &"Yes", &"Wave"]
 const QUATERNIUS_OVERWORLD_SCALE := Vector3(0.42, 0.42, 0.42)
 const SCULPT_OVERWORLD_SCALE := Vector3(0.42, 0.42, 0.42)
+## Meshy AI exports come in roughly 1m bind-pose space; scale to "baby buddy" size.
+const MESHY_OVERWORLD_SCALE := Vector3(0.65, 0.65, 0.65)
 const SPEECH_BUBBLE_LINE_LENGTH := 24
 const SPEECH_BUBBLE_BASE_HEIGHT := 2.7
 ## 2× internal resolution so the billboard sprite stays sharp on high-DPI / Forward+.
@@ -821,12 +823,21 @@ func _resolve_anim_name(candidates: Array[StringName]) -> StringName:
 
 
 func _apply_visual_presentation() -> void:
-	if _is_quaternius_dino_model(model_root):
+	if _is_meshy_dino_model(model_root):
+		model_root.scale = MESHY_OVERWORLD_SCALE
+		model_root.position = Vector3.ZERO
+	elif _is_quaternius_dino_model(model_root):
 		model_root.scale = QUATERNIUS_OVERWORLD_SCALE
 		model_root.position = Vector3(0.0, -0.02, 0.0)
 	elif _is_sculpt_dino_model(model_root):
 		model_root.scale = SCULPT_OVERWORLD_SCALE
 		model_root.position = Vector3.ZERO
+
+
+func _is_meshy_dino_model(root: Node) -> bool:
+	# `MeshyAnimationMerger` is added explicitly inside the Meshy visual scene,
+	# so its presence is a reliable signal we should preserve baked PBR.
+	return root != null and root.find_child("MeshyAnimationMerger", true, false) != null
 
 
 func _apply_palette(root: Node, primary: Color, accent: Color) -> void:
@@ -880,6 +891,10 @@ func _has_descendant_starting_with(node: Node, prefix: String) -> bool:
 
 
 func _apply_imported_palette(mesh_node: MeshInstance3D, primary: Color, accent: Color) -> void:
+	if _is_meshy_dino_model(model_root):
+		# Meshy GLBs ship baked PBR with baseColor textures; tinting them with
+		# the buddy palette would flatten that detail out, so leave them alone.
+		return
 	var surface_count := mesh_node.mesh.get_surface_count()
 	var node_name_lower := mesh_node.name.to_lower()
 	var is_sculpt_skin_mesh := node_name_lower.begins_with("dinobuddysculpt") or node_name_lower == "dinobuddysculpt"

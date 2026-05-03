@@ -13,8 +13,8 @@
   ],
   "buddies": {
     "Dino Buddy": {
-      "battle_visual_scene": "res://scenes/buddies/dino_buddy_sculpt_visual.tscn",
-      "overworld_follower_visual_scene": "res://scenes/buddies/dino_buddy_sculpt_visual.tscn",
+      "battle_visual_scene": "res://scenes/buddies/dino_buddy_meshy_visual.tscn",
+      "overworld_follower_visual_scene": "res://scenes/buddies/dino_buddy_meshy_visual.tscn",
       "palette": {
         "primary": [0.309804, 0.878431, 0.509804, 1.0],
         "accent": [0.686275, 1.0, 0.772549, 1.0]
